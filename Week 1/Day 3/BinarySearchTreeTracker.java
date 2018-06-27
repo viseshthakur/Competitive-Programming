@@ -37,17 +37,12 @@ public class Solution {
     
     public static boolean isBSTUtil(BinaryTreeNode root, int min, int max)
     {
-        /* an empty tree is BST */
         if (root == null)
             return true;
  
-        /* false if this node violates the min/max constraints */
         if (root.value < min || root.value > max)
             return false;
  
-        /* otherwise check the subtrees recursively
-        tightening the min/max constraints */
-        // Allow only distinct values
         return (isBSTUtil(root.left, min, root.value-1) &&
                 isBSTUtil(root.right, root.value+1, max));
     }
