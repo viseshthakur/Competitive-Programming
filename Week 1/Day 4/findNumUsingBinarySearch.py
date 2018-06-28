@@ -2,28 +2,22 @@ import unittest
 
 
 def contains(ordered_list, number):
-
-    # Check if an integer is present in the list
-    floor_index = 0
-    ceiling_index = len(ordered_list)
+    floor = 0
+    ceil = len(ordered_list)
     
-    while floor_index < ceiling_index:
-        guess_index = (floor_index + ceiling_index) // 2
-        guess_value = ordered_list[guess_index]
+    while floor < ceil:
+        guess_ind = (floor + ceil) // 2
+        guess_val = ordered_list[guess_ind]
         
         
-        if guess_value == number:
+        if guess_val == number:
             return True
 
-        if guess_value > number:
-            # target is to the left
-            # so move ceiling to the left
-            ceiling_index = guess_index - 1
+        if guess_val > number:
+            ceil = guess_ind - 1
 
         else:
-            # target is to the right
-            # so move floor to the right
-            floor_index = guess_index + 1
+            floor = guess_ind + 1
 
     return False
 
