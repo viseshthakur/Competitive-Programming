@@ -1,20 +1,20 @@
 import unittest
-dict1={}
+d1={}
 class Trie(object):
 
     def add_word(self, word):
-        global dict1
-        current = dict1
-        newword = False
+        global d1
+        cur = d1
+        nwrd = False
         for i in word:
-            if i not in current:
-                newword = True
-                current.update({i:{}})
-            current= current[i]
-        if "End Of Word" not in current:
-            newword = True
-            current.update({"End Of Word":{}})
-        return newword
+            if i not in cur:
+                nwrd = True
+                cur.update({i:{}})
+            cur= cur[i]
+        if "End Of Word" not in cur:
+            nwrd = True
+            cur.update({"End Of Word":{}})
+        return nwrd
 
 # Tests
 
