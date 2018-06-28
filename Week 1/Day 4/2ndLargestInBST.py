@@ -1,68 +1,116 @@
 import unittest
 
+def largest(node):
+    if node.right:
+        return largest(node.right)
+    return node.value
 
-def contains(ordered_list, number):
 
-    # Check if an integer is present in the list
-    floor_index = 0
-    ceiling_index = len(ordered_list)
+def second_largest(node):
+      
+    if node.left and not node.right:
+        return largest(node.left)
     
-    while floor_index < ceiling_index:
-        guess_index = (floor_index + ceiling_index) // 2
-        guess_value = ordered_list[guess_index]
-        
-        
-        if guess_value == number:
-            return True
+    if node.right and not node.right.right and not node.right.left:
+        return node.value
+    
+    return second_largest(node.right)
 
-        if guess_value > number:
-            # target is to the left
-            # so move ceiling to the left
-            ceiling_index = guess_index - 1
-
-        else:
-            # target is to the right
-            # so move floor to the right
-            floor_index = guess_index + 1
-
-    return False
 
 
 # Tests
 
 class Test(unittest.TestCase):
 
-    def test_empty_list(self):
-        result = contains([], 1)
-        self.assertFalse(result)
+    class BinaryTreeNode(object):
 
-    def test_one_item_list_number_present(self):
-        result = contains([1], 1)
-        self.assertTrue(result)
+        def __init__(self, value):
+            self.value = value
+            self.left = None
+            self.right = None
 
-    def test_one_item_list_number_absent(self):
-        result = contains([1], 2)
-        self.assertFalse(result)
+        def insert_left(self, value):
+            self.left = Test.BinaryTreeNode(value)
+            return self.left
 
-    def test_small_list_number_present(self):
-        result = contains([2, 4, 6], 4)
-        self.assertTrue(result)
+        def insert_right(self, value):
+            self.right = Test.BinaryTreeNode(value)
+            return self.right
 
-    def test_small_list_number_absent(self):
-        result = contains([2, 4, 6], 5)
-        self.assertFalse(result)
+    def test_full_tree(self):
+        tree = Test.BinaryTreeNode(50)
+        left = tree.insert_left(30)
+        right = tree.insert_right(70)
+        left.insert_left(10)
+        left.insert_right(40)
+        right.insert_left(60)
+        right.insert_right(80)
+        actual = second_largest(tree)
+        expected = 70
+        self.assertEqual(actual, expected)
 
-    def test_large_list_number_absent(self):
-        result = contains([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0)
-        self.assertFalse(result)
+    def test_largest_has_a_left_child(self):
+        tree = Test.BinaryTreeNode(50)
+        left = tree.insert_left(30)
+        right = tree.insert_right(70)
+        left.insert_left(10)
+        left.insert_right(40)
+        right.insert_left(60)
+        actual = second_largest(tree)
+        expected = 60
+        self.assertEqual(actual, expected)
 
-    def test_large_list_number_first(self):
-        result = contains([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1)
-        self.assertTrue(result)
+    def test_largest_has_a_left_subtree(self):
+        tree = Test.BinaryTreeNode(50)
+        left = tree.insert_left(30)
+        right = tree.insert_right(70)
+        left.insert_left(10)
+        left.insert_right(40)
+        right_left = right.insert_left(60)
+        right_left_left = right_left.insert_left(55)
+        right_left.insert_right(65)
+        right_left_left.insert_right(58)
+        actual = second_largest(tree)
+        expected = 65
+        self.assertEqual(actual, expected)
 
-    def test_large_list_number_last(self):
-        result = contains([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 10)
-        self.assertTrue(result)
+    def test_second_largest_is_root_node(self):
+        tree = Test.BinaryTreeNode(50)
+        left = tree.insert_left(30)
+        tree.insert_right(70)
+        left.insert_left(10)
+        left.insert_right(40)
+        actual = second_largest(tree)
+        expected = 50
+        self.assertEqual(actual, expected)
+
+    def test_descending_linked_list(self):
+        tree = Test.BinaryTreeNode(50)
+        left = tree.insert_left(40)
+        left_left = left.insert_left(30)
+        left_left_left = left_left.insert_left(20)
+        left_left_left.insert_left(10)
+        actual = second_largest(tree)
+        expected = 40
+        self.assertEqual(actual, expected)
+
+    def test_ascending_linked_list(self):
+        tree = Test.BinaryTreeNode(50)
+        right = tree.insert_right(60)
+        right_right = right.insert_right(70)
+        right_right.insert_right(80)
+        actual = second_largest(tree)
+        expected = 70
+        self.assertEqual(actual, expected)
+
+    def test_error_when_tree_has_one_node(self):
+        tree = Test.BinaryTreeNode(50)
+        with self.assertRaises(Exception):
+           second_largest(tree)
+
+    def test_error_when_tree_is_empty(self):
+        with self.assertRaises(Exception):
+           second_largest(None)
 
 
 unittest.main(verbosity=2)
